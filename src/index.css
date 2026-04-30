@@ -37,6 +37,7 @@ body {
   place-items: center;
   padding: 24px;
 }
+<<<<<<< HEAD
 .status-active {
   background: rgba(34, 192, 111, 0.14);
   color: #8be7af;
@@ -91,6 +92,8 @@ body {
 .orders-search::placeholder {
   color: #6f8192;
 }
+=======
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
 
 .login-card {
   width: 100%;
@@ -876,6 +879,7 @@ body {
     width: 100%;
     justify-content: center;
   }
+<<<<<<< HEAD
 }
 .subscribers-toolbar {
   display: grid;
@@ -1174,4 +1178,6 @@ body {
   text-align: center;
   color: #94a3b8;
   padding: 30px 0;
+=======
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
 }

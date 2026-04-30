@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   collection,
   onSnapshot,
+<<<<<<< HEAD
   addDoc,
   query,
   orderBy,
@@ -9,10 +10,17 @@ import {
   updateDoc,
   where,
   getDocs,
+=======
+  doc,
+  updateDoc,
+  orderBy,
+  query,
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
 } from "firebase/firestore";
 import { db } from "../firebase/config";
 import AdminLayout from "../components/AdminLayout";
 
+<<<<<<< HEAD
 const initialForm = {
   customerName: "",
   phone: "",
@@ -37,6 +45,11 @@ export default function SubscriptionCustomers() {
   const [form, setForm] = useState(initialForm);
   const [statusFilter, setStatusFilter] = useState("all");
   const [paymentFilter, setPaymentFilter] = useState("all");
+=======
+export default function SubscriptionCustomers() {
+  const [customers, setCustomers] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("all");
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -56,6 +69,7 @@ export default function SubscriptionCustomers() {
     return () => unsub();
   }, []);
 
+<<<<<<< HEAD
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({
@@ -120,6 +134,12 @@ export default function SubscriptionCustomers() {
     try {
       await updateDoc(doc(db, "customerSubscriptions", id), {
         subscriptionStatus: status,
+=======
+  async function updateStatus(id, status) {
+    try {
+      await updateDoc(doc(db, "customerSubscriptions", id), {
+        status,
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
         updatedAt: Date.now(),
       });
     } catch (error) {
@@ -128,6 +148,7 @@ export default function SubscriptionCustomers() {
     }
   }
 
+<<<<<<< HEAD
   async function updatePaymentStatus(id, status) {
     try {
       await updateDoc(doc(db, "customerSubscriptions", id), {
@@ -218,12 +239,26 @@ export default function SubscriptionCustomers() {
       paid: customers.filter(
         (c) => (c.paymentStatus || "unpaid") === "paid"
       ).length,
+=======
+  function formatDate(value) {
+    if (!value) return "N/A";
+    return new Date(value).toLocaleDateString();
+  }
+
+  const counts = useMemo(() => {
+    return {
+      all: customers.length,
+      active: customers.filter((c) => (c.status || "active") === "active").length,
+      paused: customers.filter((c) => c.status === "paused").length,
+      cancelled: customers.filter((c) => c.status === "cancelled").length,
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
     };
   }, [customers]);
 
   const filteredCustomers = useMemo(() => {
     let result = customers;
 
+<<<<<<< HEAD
     if (statusFilter !== "all") {
       result = result.filter(
         (customer) =>
@@ -234,6 +269,11 @@ export default function SubscriptionCustomers() {
     if (paymentFilter !== "all") {
       result = result.filter(
         (customer) => (customer.paymentStatus || "unpaid") === paymentFilter
+=======
+    if (activeFilter !== "all") {
+      result = result.filter(
+        (customer) => (customer.status || "active") === activeFilter
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
       );
     }
 
@@ -245,19 +285,27 @@ export default function SubscriptionCustomers() {
         const phone = customer.phone?.toLowerCase() || "";
         const city = customer.city?.toLowerCase() || "";
         const planName = customer.planName?.toLowerCase() || "";
+<<<<<<< HEAD
         const subscriberId = customer.subscriberId?.toLowerCase() || "";
+=======
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
 
         return (
           customerName.includes(q) ||
           phone.includes(q) ||
           city.includes(q) ||
+<<<<<<< HEAD
           planName.includes(q) ||
           subscriberId.includes(q)
+=======
+          planName.includes(q)
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
         );
       });
     }
 
     return result;
+<<<<<<< HEAD
   }, [customers, statusFilter, paymentFilter, searchTerm]);
 
   return (
@@ -628,6 +676,131 @@ export default function SubscriptionCustomers() {
               )}
             </tbody>
           </table>
+=======
+  }, [customers, activeFilter, searchTerm]);
+
+  return (
+    <AdminLayout title="Subscription Customers" subtitle="Manage Subscribers">
+      <section className="panel">
+        <div className="panel-head">
+          <h2>All Subscribers</h2>
+          <span className="count-pill">{filteredCustomers.length} customers</span>
+        </div>
+
+        <div className="orders-toolbar">
+          <div className="orders-filter-bar">
+            <button
+              className={`filter-btn ${activeFilter === "all" ? "active" : ""}`}
+              onClick={() => setActiveFilter("all")}
+            >
+              All ({counts.all})
+            </button>
+
+            <button
+              className={`filter-btn ${activeFilter === "active" ? "active" : ""}`}
+              onClick={() => setActiveFilter("active")}
+            >
+              Active ({counts.active})
+            </button>
+
+            <button
+              className={`filter-btn ${activeFilter === "paused" ? "active" : ""}`}
+              onClick={() => setActiveFilter("paused")}
+            >
+              Paused ({counts.paused})
+            </button>
+
+            <button
+              className={`filter-btn ${activeFilter === "cancelled" ? "active" : ""}`}
+              onClick={() => setActiveFilter("cancelled")}
+            >
+              Cancelled ({counts.cancelled})
+            </button>
+          </div>
+
+          <input
+            className="orders-search"
+            type="text"
+            placeholder="Search by customer, phone, city, plan"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <div className="orders-list">
+          {filteredCustomers.map((customer) => (
+            <div className="order-card" key={customer.id}>
+              <div className="order-top">
+                <div>
+                  <h3>{customer.customerName}</h3>
+                  <p className="order-meta">{customer.phone}</p>
+                </div>
+
+                <span className={`order-status status-${customer.status || "active"}`}>
+                  {customer.status || "active"}
+                </span>
+              </div>
+
+              <div className="order-section">
+                <h4>Plan</h4>
+                <p>
+                  <strong>{customer.planName}</strong>
+                </p>
+                <p>
+                  ₹{customer.price || 0} • {customer.period || ""}
+                </p>
+              </div>
+
+              <div className="order-section">
+                <h4>Address</h4>
+                <p>{customer.addressLine1}</p>
+                {customer.addressLine2 ? <p>{customer.addressLine2}</p> : null}
+                <p>
+                  {customer.city} - {customer.pincode}
+                </p>
+              </div>
+
+              <div className="order-section">
+                <h4>Subscription Details</h4>
+                <p>Start Date: {customer.startDate || "N/A"}</p>
+                <p>Created: {formatDate(customer.createdAt)}</p>
+              </div>
+
+              <div className="order-bottom">
+                <div className="order-total">
+                  {customer.type ? `Type: ${customer.type}` : "Subscription"}
+                </div>
+
+                <div className="order-actions">
+                  <button
+                    className="primary-btn"
+                    onClick={() => updateStatus(customer.id, "active")}
+                  >
+                    Active
+                  </button>
+
+                  <button
+                    className="secondary-btn"
+                    onClick={() => updateStatus(customer.id, "paused")}
+                  >
+                    Pause
+                  </button>
+
+                  <button
+                    className="danger-btn"
+                    onClick={() => updateStatus(customer.id, "cancelled")}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {filteredCustomers.length === 0 && (
+            <div className="empty-state">No subscription customers found.</div>
+          )}
+>>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
         </div>
       </section>
     </AdminLayout>
