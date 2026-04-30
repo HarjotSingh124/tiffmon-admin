@@ -33,15 +33,12 @@ export default function Sidebar() {
      <NavLink to="/subscription-customers" className="nav-link">
   👤 Subscription Customers
 </NavLink>
-<<<<<<< HEAD
 <NavLink to="/delivery" className="nav-link">
   🚚 Daily Delivery
 </NavLink>
 <NavLink to="/delivery-boy" className="nav-link">
   🛵 Delivery Boy
 </NavLink>
-=======
->>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
       </nav>
     </aside>
   );

@@ -32,13 +32,10 @@ export default function Login() {
       await setDoc(
         doc(db, "admins", user.uid),
         {
-<<<<<<< HEAD
           email: user.email || "harjothari2006@gmail.com",
-=======
           name: user.displayName || "Admin",
           email: user.email || "",
           role: "admin",
->>>>>>> a6d09a5bc5c8ea7eea4f4e2e65eb0300f4d429e1
         },
         { merge: true }
       );
